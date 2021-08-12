@@ -4,8 +4,18 @@ import dash
 import dash_html_components as html
 import dash_core_components as dcc
 
-# Importing data
-airline_data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/airline_data.csv',
+# Importing data from web location
+# airline_data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/airline_data.csv',
+#                             encoding = 'ISO-8859-1',
+#                             dtype={'Div1Airport': str,
+#                                     'Div1TailNum': str,
+#                                     'Div2Airport': str,
+#                                     'Div2TailNum': str})
+# # Save the csv locally 
+# airline_data.to_csv('./airline_data.csv')
+
+# To speed up the application, use the following code after the csv has been downloaded from the weblocation
+airline_data = pd.read_csv('./airline_data.csv',
                             encoding = 'ISO-8859-1',
                             dtype={'Div1Airport': str,
                                     'Div1TailNum': str,
@@ -23,6 +33,21 @@ print(df.groupby('DistanceGroup')['Flights'].sum())
 # Using Plotly Express, create an interactive pie chart
 px.pie(df, values='Flights', names='DistanceGroup', title='Distance group proportion by flights')
 
-# If you'd like to see a pop-up of how the pie chart looks, use the following 2 lines of code
-fig = px.pie(df, values='Flights', names='DistanceGroup', title='Distance group proportion by flights')
-fig.show()
+# If you'd like to see how the pie chart looks, 
+# use the following 2 lines of code to show the pie chart in a web browser
+# fig = px.pie(df, values='Flights', names='DistanceGroup', title='Distance group proportion by flights')
+# fig.show()
+
+# Create a dash application
+app = dash.Dash(__name__)
+
+# Creating the layout for the application
+# This is unique to Dash, no direct HTML code necessary for webpages
+app.layout = html.Div(children=[html.H1(),
+                                html.P(),
+                                dcc.Graph(),
+                                ])
+
+# Run the application
+if __name__ == '__main__':
+    app.run_server()
