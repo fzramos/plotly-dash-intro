@@ -27,11 +27,12 @@ df = airline_data.sample(n=500, random_state=0)
 
 # To look at the data, writing top 5 rows to a csv
 df.head().to_csv('./df_head.csv')
-# can see that the data isn't very clean, lots of nulls
+# Displaying the data that will be graphed by the pie chart
 print(df.groupby('DistanceGroup')['Flights'].sum())
 
 # Using Plotly Express, create an interactive pie chart
-px.pie(df, values='Flights', names='DistanceGroup', title='Distance group proportion by flights')
+# Power of Plotly: does the necessary group by and aggregation automatically
+fig = px.pie(df, values='Flights', names='DistanceGroup', title='Distance group proportion by flights')
 
 # If you'd like to see how the pie chart looks, 
 # use the following 2 lines of code to show the pie chart in a web browser
@@ -41,11 +42,16 @@ px.pie(df, values='Flights', names='DistanceGroup', title='Distance group propor
 # Create a dash application
 app = dash.Dash(__name__)
 
-# Creating the layout for the application
+# Creating the layout and content for the application
 # This is unique to Dash, no direct HTML code necessary for webpages
-app.layout = html.Div(children=[html.H1(),
-                                html.P(),
-                                dcc.Graph(),
+# HTML tags are abstracted as Dash Python classes
+app.layout = html.Div(children=[html.H1('Airline Dashboard',
+                                        style={'textAlign': 'center',
+                                                'color': '#503D36',
+                                                'font-size': 40}),
+                                html.P('Proportion of distance group (250 mile distance interval group) by flights.',
+                                        style={'textAlign':'center', 'color': '#F57241'}),
+                                dcc.Graph(figure=fig),
                                 ])
 
 # Run the application
