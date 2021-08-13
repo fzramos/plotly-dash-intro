@@ -33,8 +33,8 @@ fig2 = px.bar(df, x='Flights', y='DistanceGroup', orientation='h',
 # Initializing app
 app=dash.Dash(__name__)
 
-app.layout = html.Div(children=[html.H1('Interactive Dashboard'),
-                                html.P('Interactive Dashboard about U.S. Airline Flights'),
+app.layout = html.Div(children=[html.H1('Interactive Dashboard', style={'textAlign':'center'}),
+                                html.P('Interactive Dashboard about U.S. Airline Flights', style={'textAlign':'center'}),
                                 html.Div([
                                     html.H2('Interactive Graph 1'),
                                     html.Div([
@@ -54,7 +54,7 @@ app.layout = html.Div(children=[html.H1('Interactive Dashboard'),
                                     html.Div(dcc.Graph(id='line-plot-1'))
                                 ]),
                                 html.Div([
-                                    html.H2('Interactive Graph 3 (Multi-Input'),
+                                    html.H2('Interactive Graph 3 (Multi-Input)'),
                                     html.Div([
                                         'Year:', dcc.Input(id='input-yr-3', value='2018'),
                                         '\tDestination State Abbr.:', dcc.Input(id='input-symbol-1', value='AZ')
@@ -91,7 +91,6 @@ def month_avg_delay_yr(yr):
 def graph_top10_yr_state(yr, state):
     df_yr = df.loc[(df['Year']==int(yr)) & (df['DestState']==state.upper())]
     df_yr_top_airlines = df_yr.groupby('Reporting_Airline')['Flights'].sum().nlargest(10).reset_index()
-    print(df_yr_top_airlines)
     return px.bar(df_yr_top_airlines, y='Reporting_Airline', x='Flights', orientation='h')
 
 if __name__=='__main__':
