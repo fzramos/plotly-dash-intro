@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
+from pandas.io.formats import style
 import plotly.express as px
 from dash.dependencies import Input, Output
 
@@ -26,14 +27,20 @@ app = dash.Dash(__name__)
 app.layout = html.Div(children=[html.H1('Flight Delay Time Statistics',
                                 style={'textAlign':'right'}),
                                 html.Div(children=["Input Year:", 
-                                        dcc.Input(id='in-yr', value='2011')
-                                ]),
-                                dcc.Graph(id='chart-1'),
-                                dcc.Graph(id='chart-2'),
-                                dcc.Graph(id='chart-3'),
-                                dcc.Graph(id='chart-4'),
-                                dcc.Graph(id='chart-5'),
-
+                                        dcc.Input(id='in-yr', value='2011'),
+                                        ], style={'font-size': 30}
+                                ),
+                                html.Br(),
+                                html.Br(),
+                                html.Div([ # Goal here is 2 graphs on 1 row
+                                    html.Div(dcc.Graph(id='chart-1')),
+                                    html.Div(dcc.Graph(id='chart-2')),
+                                ], style={'display': 'flex'}),
+                                html.Div([ # Goal here is 2 graphs on 1 line
+                                    html.Div(dcc.Graph(id='chart-3')),
+                                    html.Div(dcc.Graph(id='chart-4')),
+                                ], style={'display': 'flex'}),
+                                html.Div(dcc.Graph(id='chart-5'), style={'width':'65%'})
                                 ])
 
 @app.callback(
