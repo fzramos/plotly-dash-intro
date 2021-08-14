@@ -12,10 +12,7 @@ airline_data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.a
                                     'Div1TailNum': str,
                                     'Div2Airport': str,
                                     'Div2TailNum': str})
-print(airline_data.shape)
-df = airline_data.sample(n=1500, random_state=0)
-# df = airline_data
-
+df = airline_data.sample(n=2500, random_state=0)
 
 # Creating Charts for overall dataset
 # fig1 = px.pie(df, values='Flights', names='DistanceGroup', 
@@ -54,18 +51,30 @@ def create_charts_for_yr(yr):
     df_carrier_yr_delays = df_yr.groupby(['Reporting_Airline', 'Month'], as_index=False)\
         [['DepDelayMinutes','WeatherDelay','ArrDelay','NASDelay','SecurityDelay','LateAircraftDelay']]\
         .mean()
+    # need to convert all non-minute columns from hours to minutes
+    df_carrier_yr_delays[['WeatherDelay','ArrDelay','NASDelay','SecurityDelay','LateAircraftDelay']] = \
+        df_carrier_yr_delays[['WeatherDelay','ArrDelay','NASDelay','SecurityDelay','LateAircraftDelay']] * 60
     fig1 = px.line(df_carrier_yr_delays, 
                         x='Month',
                         y='DepDelayMinutes',
                         color='Reporting_Airline')
-
     fig2 = px.line(df_carrier_yr_delays, 
                         x='Month',
                         y='WeatherDelay',
                         color='Reporting_Airline')
-
-    # return [fig1, fig, fig3, fig4, fig5]
-    return [fig1, fig2, fig1, fig1, fig1]
+    fig3 = px.line(df_carrier_yr_delays, 
+                        x='Month',
+                        y='NASDelay',
+                        color='Reporting_Airline')
+    fig4 = px.line(df_carrier_yr_delays, 
+                        x='Month',
+                        y='SecurityDelay',
+                        color='Reporting_Airline')  
+    fig5 = px.line(df_carrier_yr_delays, 
+                        x='Month',
+                        y='LateAircraftDelay',
+                        color='Reporting_Airline')                        
+    return [fig1, fig2, fig3, fig4, fig5]
 
 
 if __name__ == "__main__":
